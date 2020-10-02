@@ -442,7 +442,6 @@ public class WebLibrary
 		{
 			reportError("Exception while clicking the element with By locator : " + byVal + ", Exception : "
 					+ e.getMessage());
-
 		}
 	}
 
@@ -472,6 +471,7 @@ public class WebLibrary
 			fluentWait(byVal, iSecs);
 			WebElement element = verifyElementExist(byVal, sReportText);
 			scrollToElement(element);
+			new Actions(driver).moveToElement(element).click().build().perform();
 			reportPass(sReportText + " was successfully clicked");
 		}
 		catch (Exception e)
