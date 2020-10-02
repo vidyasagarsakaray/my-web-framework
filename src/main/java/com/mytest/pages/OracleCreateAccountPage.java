@@ -113,7 +113,7 @@ public class OracleCreateAccountPage extends WebLibrary
 
 	public void verifyConfirmationMessage()
 	{
-		waitForElement(emailConfirmation, Constants.M_DELAY_S);
+		waitForElementAndContinue(emailConfirmation, Constants.M_DELAY_S);
 		if (verifyElementExist(emailConfirmation, "Email Confirmation").isDisplayed())
 		{
 			reportPass("Account Created succesfully, Confirmation is sent to email");

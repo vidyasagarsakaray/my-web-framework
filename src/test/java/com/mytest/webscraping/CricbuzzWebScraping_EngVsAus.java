@@ -8,18 +8,18 @@ import org.testng.annotations.Test;
 
 import com.mytest.constants.Constants;
 import com.mytest.pages.CricbuzzHomePage;
-import com.mytest.services.WebApplicationLibrary;
+import com.mytest.services.WebLibrary;
 
 @Listeners(com.mytest.utils.TestListener.class)
 public class CricbuzzWebScraping_EngVsAus
 {
-	WebApplicationLibrary appLib;
+	WebLibrary appLib;
 	WebDriver driver;
 
 	@Test
 	public void testMethod()
 	{
-		appLib = new WebApplicationLibrary();
+		appLib = new WebLibrary();
 		driver = appLib.invokeBrowser("chrome");
 		CricbuzzHomePage cbHome = new CricbuzzHomePage(driver);
 

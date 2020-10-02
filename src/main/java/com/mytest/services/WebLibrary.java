@@ -274,8 +274,8 @@ public class WebLibrary
 		}
 		catch (Exception e)
 		{
-//			reportError("Exception while waiting for the element with By locator : " + by + ", Exception : "
-//					+ e.getMessage());
+			reportError("Exception while waiting for the element with By locator : " + by + ", Exception : "
+					+ e.getMessage());
 		}
 	}
 

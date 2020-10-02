@@ -5,18 +5,18 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.mytest.pages.CricbuzzHomePage;
-import com.mytest.services.WebApplicationLibrary;
+import com.mytest.services.WebLibrary;
 
 @Listeners(com.mytest.utils.TestListener.class)
 public class CricbuzzWebScraping
 {
-	WebApplicationLibrary appLib;
+	WebLibrary appLib;
 	WebDriver driver;
 
 	@Test
 	public void testMethod()
 	{
-		appLib = new WebApplicationLibrary();
+		appLib = new WebLibrary();
 		driver = appLib.invokeBrowser("chrome");
 		CricbuzzHomePage cbHome = new CricbuzzHomePage(driver);
 		cbHome.goToCricbuzzHome();
