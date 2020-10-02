@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.PageLoadStrategy;
@@ -269,8 +270,7 @@ public class WebLibrary
 			WebDriverWait wait = new WebDriverWait(getDriver(), timeOutInSecs);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 			wait.until(ExpectedConditions.elementToBeClickable(by));
-			wait.ignoring(NoSuchElementException.class, StaleElementReferenceException.class).pollingEvery(1,
-					TimeUnit.SECONDS);
+			wait.ignoring(Exception.class).pollingEvery(1, TimeUnit.SECONDS);
 		}
 		catch (Exception e)
 		{
@@ -286,8 +286,7 @@ public class WebLibrary
 			WebDriverWait wait = new WebDriverWait(getDriver(), timeOutInSecs);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 			wait.until(ExpectedConditions.elementToBeClickable(by));
-			wait.ignoring(NoSuchElementException.class, StaleElementReferenceException.class).pollingEvery(1,
-					TimeUnit.SECONDS);
+			wait.ignoring(Exception.class).pollingEvery(1, TimeUnit.SECONDS);
 		}
 		catch (Exception e)
 		{
@@ -305,7 +304,7 @@ public class WebLibrary
 	{
 		try
 		{
-			delay(Constants.VVS_DELAY_MS);
+			delay(Constants.VVVS_DELAY_MS);
 			new FluentWait<WebDriver>(getDriver()).withTimeout(timeInSecs, TimeUnit.SECONDS)
 					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(Exception.class)
 					.until(new ExpectedCondition<WebElement>()
@@ -379,6 +378,7 @@ public class WebLibrary
 		{
 			fluentWait(byVal, iSecs);
 			element = verifyElementExist(byVal, sReportText);
+			scrollToElement(element);
 			element.click();
 			String elementValue = element.getAttribute("value");
 			if (!elementValue.isEmpty() && elementValue != null)
@@ -386,6 +386,7 @@ public class WebLibrary
 				element.clear();
 			}
 			element.sendKeys(sValue);
+			element.sendKeys(Keys.TAB);
 			reportPass("The text '" + sValue + "' was successfully entered into '" + sReportText + "' field");
 		}
 		catch (Exception e)
@@ -449,16 +450,7 @@ public class WebLibrary
 	{
 		try
 		{
-			delay(Constants.VVVS_DELAY_MS);
-			new FluentWait<WebDriver>(getDriver()).withTimeout(iSecs, TimeUnit.SECONDS)
-					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
-					.ignoring(StaleElementReferenceException.class).until(new ExpectedCondition<WebElement>()
-					{
-						public WebElement apply(WebDriver driver)
-						{
-							return driver.findElement(byVal);
-						}
-					});
+			fluentWait(byVal, iSecs);
 			WebElement element = verifyElementExist(byVal, sReportText);
 			scrollToElement(element);
 			JavascriptExecutor executor = (JavascriptExecutor) getDriver();
@@ -506,6 +498,7 @@ public class WebLibrary
 			fluentWait(byVal, iSecs);
 			element = verifyElementExist(byVal, sReportText);
 			verifyElementExist(byVal, sReportText);
+			scrollToElement(element);
 			Select select = new Select(element);
 			select.selectByVisibleText(sVal);
 			reportPass(sVal + " is selected");
@@ -574,11 +567,7 @@ public class WebLibrary
 		try
 		{
 			reportPass("Waiting for the element with By locator " + byVal + " to disappear from the page");
-			WebDriverWait wait = new WebDriverWait(getDriver(), timeOutInSecs);
-			wait.until(ExpectedConditions.invisibilityOfElementLocated(byVal));
-			wait.ignoring(NoSuchElementException.class, StaleElementReferenceException.class).pollingEvery(1,
-					TimeUnit.SECONDS);
-			wait.ignoring(Exception.class).pollingEvery(1, TimeUnit.SECONDS);
+			waitForElementAndContinue(byVal, timeOutInSecs);
 			reportPass("The element with By locator " + byVal + " was disappeared from the page");
 		}
 		catch (Exception e)
@@ -622,16 +611,13 @@ public class WebLibrary
 
 	public void scrollToElement(WebElement element)
 	{
-		// delay(500);
+		new Actions(getDriver()).moveToElement(element).build().perform();
+//		delay(Constants.VVVS_DELAY_MS);
 		String scrollElementIntoMiddle = "var viewPortHeight =Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"
 				+ "var elementTop = arguments[0].getBoundingClientRect().top;"
 				+ "window.scrollBy(0, elementTop-(viewPortHeight/2));";
 		((JavascriptExecutor) driver).executeScript(scrollElementIntoMiddle, element);
-		// ((JavascriptExecutor)
-		// getDriver()).executeScript("arguments[0].scrollIntoView();", element);
-		delay(300);
-		new Actions(getDriver()).moveToElement(element).build().perform();
-		delay(300);
+		delay(Constants.VVVS_DELAY_MS);
 	}
 
 	public void verifyPageTitle(String expectedPageTitle)
