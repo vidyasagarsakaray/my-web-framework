@@ -1,4 +1,4 @@
-package com.mytest.webscraping;
+package com.mytest.oracle;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Listeners;
